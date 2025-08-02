@@ -25,14 +25,21 @@ export default function OracleChat() {
     script.src = "https://static.oracle.com/cdn/oda/latest/web-sdk.js";
     script.async = true;
     script.onload = () => {
-      console.log("Oracle", window.WebSDK);
+      // eslint-disable-next-line
+     // @ts-ignore
       window.Bots = new WebSDK(chatWidgetSettings);
       setTimeout(() => {
+              // eslint-disable-next-line
+     // @ts-ignore
         window.Bots = new WebSDK(chatWidgetSettings);
+              // eslint-disable-next-line
+     // @ts-ignore
         Bots.connect().then(
           () => {
             console.log("Connection Successful");
           },
+                // eslint-disable-next-line
+     // @ts-ignore
           (reason) => {
             console.log("Connection failed",reason);
             

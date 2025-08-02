@@ -1,11 +1,13 @@
-import { Container, Table, Title } from '@mantine/core'
-import { mockResponses } from '../data/mockResponses'
+import { Container, Table, Title } from "@mantine/core";
+import { mockResponses } from "../data/mockResponses";
 
 export default function AdminPage() {
   return (
     <Container>
-      <Title order={2} mb="md">Respuestas por usuario</Title>
-      <Table striped withBorder withColumnBorders>
+      <Title order={2} mb="md">
+        Respuestas por usuario
+      </Title>
+      <Table>
         <thead>
           <tr>
             <th>Nombre</th>
@@ -28,5 +30,5 @@ export default function AdminPage() {
         </tbody>
       </Table>
     </Container>
-  )
+  );
 }
