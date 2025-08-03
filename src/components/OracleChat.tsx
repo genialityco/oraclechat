@@ -1,60 +1,52 @@
-import { useEffect } from "react";
-//tutorial
-//oda-d819c681fc924b1db7bf0befe8a02e20-da71726f.data.digitalassistant.oci.oraclecloud.com
-var chatWidgetSettings = {
-  // ⬅️ Ajusta estos valores según tu configuración
-  // skill/bot ID está en tu ODA console
-  // 'channelId' es del canal web configurado en ODA
-  //URI: "http://oda-d819c681fc924b1db7bf0befe8a02e20-da71726f.data.digitalassistant.oci.oraclecloud.com/oda/api/v1",
+import { useEffect, useRef } from "react";
 
-  //URI: "oda-d819c681fc924b1db7bf0befe8a02e20-da71726f.data.digitalassistant.oci.oraclecloud.com/botsui",
-  
-//https://oda-d819c681fc924b1db7bf0befe8a02e20-da71726f.data.digitalassistant.oci.oraclecloud.com/management-api/v1/bots/1ECBA189-7CA2-40A0-9A12-EAA4C5DC2D13/test/responses?_=1754150444973
-  URI: "https://oda-d819c681fc924b1db7bf0befe8a02e20-da71726f.data.digitalassistant.oci.oraclecloud.com", 
+const chatWidgetSettings = {
+  URI: "https://oda-d819c681fc924b1db7bf0befe8a02e20-da71726f.data.digitalassistant.oci.oraclecloud.com",
   channelId: "ed5a7bd5-85ce-4ed3-9ad3-fa6eca0f45fb",
+  enableStartConversation: true, // critical!
   hidden: false,
   enableAttachment: false,
   openChatOnLoad: true,
   timestamp: Date.now(),
-};
+  //Si esta propiedad tiene un valor, el bot muestra el primer mensaje del skill(bot) al cargar.
+  initUserHiddenMessage: "Hola, soy BUG de Oracle.",
+  //initUserHiddenMessage: "Hola, soy el bot de Oracle. ¿En qué puedo ayudarte hoy?",
 
+};
 export default function OracleChat() {
+  const initialized = useRef(false); // This ref persists across mounts
+
   useEffect(() => {
+    if (initialized.current) {
+      console.log("OracleChat: Already initialized",window.__oracleBotLoaded);
+      return;
+    }
+    initialized.current = true;
+
+    //window.__oracleBotLoaded flag is global not attached to the component instance
+    if (window.__oracleBotLoaded) { 
+      console.log("OracleChat: Bot already loaded");
+      return;
+    }
+
+    window.__oracleBotLoaded = true;
+
     const script = document.createElement("script");
-    script.type = "text/javascript"; //https://cdn.oracle.com/oda/web-sdk/loader.js
     script.src = "https://static.oracle.com/cdn/oda/latest/web-sdk.js";
     script.async = true;
     script.onload = () => {
-      // eslint-disable-next-line
-     // @ts-ignore
-      window.Bots = new WebSDK(chatWidgetSettings);
-      setTimeout(() => {
-              // eslint-disable-next-line
-     // @ts-ignore
-        window.Bots = new WebSDK(chatWidgetSettings);
-              // eslint-disable-next-line
-     // @ts-ignore
-        Bots.connect().then(
-          () => {
-            console.log("Connection Successful");
-          },
-                // eslint-disable-next-line
-     // @ts-ignore
-          (reason) => {
-            console.log("Connection failed",reason);
-            
-          }
-        );
-      }, 2000);
-      // window.OracleWebChat.init({
-      //     container: 'web-chat',
-      //     endpoint: 'https://oda.oraclecloud.com/your-instance-id',
-      //     access
-
-      //window.OracleBots.loadBot();
+      // @ts-ignore
+      const Bots = new window.WebSDK(chatWidgetSettings);
+      // @ts-ignore
+      window.Bots = Bots;
+      Bots.connect().then(
+        () => console.log("OracleChat: Connected"),
+        (err) => console.error("OracleChat: Connection failed", err)
+      );
     };
+
     document.body.appendChild(script);
   }, []);
 
-  return <div id="web-chat">Test</div>;
+  return <div id="web-chat" />;
 }
