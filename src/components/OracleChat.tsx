@@ -9,7 +9,7 @@ const chatWidgetSettings = {
   openChatOnLoad: true,
   timestamp: Date.now(),
   //Si esta propiedad tiene un valor, el bot muestra el primer mensaje del skill(bot) al cargar.
-  initUserHiddenMessage: "Hola, soy BUG de Oracle.",
+  initUserHiddenMessage: "STARTNEWCONVERSATION", // "Hola, soy el bot de Oracle. ¿En qué puedo ayudarte hoy?",
   //initUserHiddenMessage: "Hola, soy el bot de Oracle. ¿En qué puedo ayudarte hoy?",
 
 };
