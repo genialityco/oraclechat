@@ -1,5 +1,12 @@
-import { useEffect, useRef } from "react";
+//Oracle Agents documentation 
+//https://docs.oracle.com/en/cloud/paas/digital-assistant/use-chatbot/customize-chat-widget.html#GUID-45FA259F-4558-4C0F-A3AD-0BB7586EA595
 
+import { useEffect, useRef } from "react";
+declare global {
+  interface Window {
+    __oracleBotLoaded?: boolean;
+  }
+}
 const chatWidgetSettings = {
   URI: "https://oda-d819c681fc924b1db7bf0befe8a02e20-da71726f.data.digitalassistant.oci.oraclecloud.com",
   channelId: "ed5a7bd5-85ce-4ed3-9ad3-fa6eca0f45fb",
@@ -41,7 +48,7 @@ export default function OracleChat() {
       window.Bots = Bots;
       Bots.connect().then(
         () => console.log("OracleChat: Connected"),
-        (err) => console.error("OracleChat: Connection failed", err)
+        (err: unknown) => console.error("OracleChat: Connection failed", err)
       );
     };
 
